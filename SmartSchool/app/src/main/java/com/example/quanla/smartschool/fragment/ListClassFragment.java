@@ -1,12 +1,10 @@
 package com.example.quanla.smartschool.fragment;
 
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,9 +18,9 @@ import com.example.quanla.smartschool.R;
 import com.example.quanla.smartschool.activities.ListClassActivity;
 import com.example.quanla.smartschool.adapter.ClassListAdapter;
 import com.example.quanla.smartschool.database.DbClassContext;
-import com.example.quanla.smartschool.eventbus.AddNewClassEvent;
-import com.example.quanla.smartschool.eventbus.GetDataFaildedEvent;
-import com.example.quanla.smartschool.eventbus.GetDataSuccusEvent;
+import com.example.quanla.smartschool.evenbus.AddNewClassEvent;
+import com.example.quanla.smartschool.evenbus.GetDataFaildedEvent;
+import com.example.quanla.smartschool.evenbus.GetDataSuccusEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -32,9 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class ListClassFragment extends Fragment {
     private static final String TAG = ListClassActivity.class.toString();
     @BindView(R.id.rv_class_list)
@@ -50,7 +46,7 @@ public class ListClassFragment extends Fragment {
 
         progress = ProgressDialog.show(this.getContext(), "Loading",
                 "Please waiting...", true);
-        if (DbClassContext.instance.getClassStudents()!=null){
+        if (DbClassContext.instance.getStudents()!=null){
             progress.dismiss();
             classListAdapter = new ClassListAdapter(this.getContext());
             rvClassList.setAdapter(classListAdapter);
@@ -66,7 +62,6 @@ public class ListClassFragment extends Fragment {
     }
 
     private void setupUI(View view) {
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("List Class");
         ButterKnife.bind(this, view);
     }
 
@@ -79,16 +74,19 @@ public class ListClassFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         EventBus.getDefault().register(this);
+        // luc back no deo goi cai ham nay
     }
-
+// m huy dang ky trong onDestroy view dcm ok d cm khi add xong phai load lai data nhi?add thanh cong thi add vao Db luon
     @Override
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+        // sao nó đéo hiện task?
 
     @Subscribe(sticky = true ,threadMode = ThreadMode.MAIN)
     public void getDataSuccus(GetDataSuccusEvent event) {
+        // luc ve lai no doi cai nay dcm
         progress.dismiss();
         classListAdapter = new ClassListAdapter(this.getContext());
         rvClassList.setAdapter(classListAdapter);
@@ -106,10 +104,5 @@ public class ListClassFragment extends Fragment {
     }
 
 
-    @OnClick(R.id.fab)
-    void onFabClick() {
-        AddNewClassFragment addNewClassFragment = new AddNewClassFragment();
-        addNewClassFragment.setTitle("Add new class");
-        (new SceneFragment(getActivity().getSupportFragmentManager(), R.id.fl_main)).replaceFragment(addNewClassFragment, true);
-    }
+
 }

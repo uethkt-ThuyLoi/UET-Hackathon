@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.quanla.smartschool.activities.ListClassActivity">
+    android:fitsSystemWindows="true"
+    tools:context=".activities.ListClassActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -25,6 +26,7 @@
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
     </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -2,11 +2,11 @@ package com.example.quanla.smartschool.database;
 
 import android.util.Log;
 
-import com.example.quanla.smartschool.classlistdata.ClassStudent;
-import com.example.quanla.smartschool.eventbus.GetDataFaildedEvent;
-import com.example.quanla.smartschool.eventbus.GetDataSuccusEvent;
-import com.example.quanla.smartschool.networks.NetMicrosoftContext;
-import com.example.quanla.smartschool.services.FaceGroupService;
+import com.example.quanla.smartschool.database.model.ClassStudent;
+import com.example.quanla.smartschool.evenbus.GetDataFaildedEvent;
+import com.example.quanla.smartschool.evenbus.GetDataSuccusEvent;
+import com.example.quanla.smartschool.networks.NetContextMicrosoft;
+import com.example.quanla.smartschool.networks.services.ClassService;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -18,46 +18,39 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by DUC THANG on 3/10/2017.
+ * Created by tranh on 3/11/2017.
  */
 
 public class DbClassContext {
-    private static final String TAG = DbClassContext.class.toString();
-    private List<ClassStudent> classStudents;
-    private final String urlGetList = "https://westus.api.cognitive.microsoft.com/face/v1.0/persongroups?start=0";
-    public static final DbClassContext instance = new DbClassContext();
+    private final String TAG=DbClassContext.class.toString();
+    public static final DbClassContext instance=new DbClassContext();
+    private List<ClassStudent> students;
 
+    public List<ClassStudent> getStudents() {
+        return students;
+    }
 
     private DbClassContext() {
-        this.classStudents = new Vector<>();
+        this.students = new Vector<>();
+        getAllGroup();
     }
-
-    public List<ClassStudent> getClassStudents() {
-        return classStudents;
-    }
-
-    public void setClassStudents(List<ClassStudent> classStudents) {
-        this.classStudents = classStudents;
-    }
-
-    int count = 0;
-
-
     public void getAllGroup() {
-        FaceGroupService faceGroupService = NetMicrosoftContext.instance.create(FaceGroupService.class);
-        faceGroupService.getAllGroup(urlGetList).enqueue(new Callback<List<ClassStudent>>() {
+        students.clear();
+        ClassService classService = NetContextMicrosoft.instance.create(ClassService.class);
+        classService.getAllGroup().enqueue(new Callback<List<ClassStudent>>() {
             @Override
             public void onResponse(Call<List<ClassStudent>> call, Response<List<ClassStudent>> response) {
-                classStudents = response.body();
-
+                students = response.body();
+                for (int i = 0; i < students.size(); i++) {
+                    Log.e(TAG, String.format("onResponse: %s", students.get(i)) );
+                }
                 Log.e(TAG, "onResponse: load hết group");
-                EventBus.getDefault().post(new GetDataSuccusEvent(classStudents));
+                EventBus.getDefault().post(new GetDataSuccusEvent(students));
             }
 
             @Override
             public void onFailure(Call<List<ClassStudent>> call, Throwable t) {
                 Log.e(TAG, String.format("onFailure: %s", t.toString()));
-
                 EventBus.getDefault().post(new GetDataFaildedEvent());
             }
         });

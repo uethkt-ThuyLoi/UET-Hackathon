@@ -1,31 +1,40 @@
 package com.example.quanla.smartschool.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.view.View;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.quanla.smartschool.R;
+import com.example.quanla.smartschool.adapter.ClassListAdapter;
+import com.example.quanla.smartschool.adapter.StudentListAdapter;
 import com.example.quanla.smartschool.database.DbClassContext;
-import com.example.quanla.smartschool.eventbus.GotoStudentListActivity;
+import com.example.quanla.smartschool.evenbus.GetDataSuccusEvent;
+import com.example.quanla.smartschool.evenbus.GotoStudentListActivity;
 import com.example.quanla.smartschool.fragment.ListClassFragment;
 import com.example.quanla.smartschool.fragment.SceneFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ListClassActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     ActionBarDrawerToggle toggle;
+
 
     private static final String TAG = ListClassActivity.class.toString();
 
@@ -33,9 +42,10 @@ public class ListClassActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_class);
+        EventBus.getDefault().register(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
@@ -84,6 +94,14 @@ public class ListClassActivity extends AppCompatActivity
         Intent intent = new Intent(this, StudentListActivity.class);
         startActivity(intent);
     }
+
+    @Subscribe
+    public void onLoadDataconplete(GetDataSuccusEvent event){
+        ClassListAdapter classListAdapter=new ClassListAdapter(this);
+
+
+    }
+
 
     @Override
     public void onBackPressed() {

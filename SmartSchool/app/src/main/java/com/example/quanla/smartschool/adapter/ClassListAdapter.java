@@ -10,32 +10,32 @@ import android.view.ViewGroup;
 
 import com.example.quanla.smartschool.R;
 import com.example.quanla.smartschool.activities.StudentListActivity;
-import com.example.quanla.smartschool.adapter.viewholders.ClassListViewHolder;
-import com.example.quanla.smartschool.classlistdata.ClassStudent;
+import com.example.quanla.smartschool.adapter.viewhodler.ClassListViewHodler;
 import com.example.quanla.smartschool.database.DbClassContext;
 import com.example.quanla.smartschool.database.DbStudentContext;
-import com.example.quanla.smartschool.studentdata.Student;
+import com.example.quanla.smartschool.database.model.ClassStudent;
+import com.example.quanla.smartschool.database.model.Student;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.Vector;
 
 /**
- * Created by DUC THANG on 3/10/2017.
+ * Created by hieutran on 3/11/17.
  */
 
-public class ClassListAdapter extends RecyclerView.Adapter<ClassListViewHolder> {
+public class ClassListAdapter extends RecyclerView.Adapter<ClassListViewHodler> {
     private final String TAG = ClassListAdapter.class.toString();
     private Context context;
     private final String urlGetList = "https://westus.api.cognitive.microsoft.com/face/v1.0/persongroups?start=0";
 
     @Override
-    public ClassListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ClassListViewHodler onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View itemView = layoutInflater.inflate(R.layout.class_item, parent, false);
 
         //2: create ViewHolder
-        return new ClassListViewHolder(itemView);
+        return new ClassListViewHodler(itemView);
     }
 
     public ClassListAdapter(Context context) {
@@ -45,8 +45,8 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListViewHolder> 
 
 
     @Override
-    public void onBindViewHolder(ClassListViewHolder holder, int position) {
-        final ClassStudent classStudent = DbClassContext.instance.getClassStudents().get(position);
+    public void onBindViewHolder(ClassListViewHodler holder, int position) {
+        final ClassStudent classStudent = DbClassContext.instance.getStudents().get(position);
         classStudent.setStudents(new Vector<Student>());
         Log.e(TAG, String.format("onBindViewHolder: GỬi bind %s", classStudent.getStudents().size()));
         holder.bind(classStudent);
@@ -65,7 +65,7 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListViewHolder> 
 
     @Override
     public int getItemCount() {
-        return DbClassContext.instance.getClassStudents().size();
+        return DbClassContext.instance.getStudents().size();
     }
 
 
