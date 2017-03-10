@@ -1,7 +1,9 @@
-package com.example.quanla.smartschool;
+package com.example.quanla.smartschool.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.quanla.smartschool.R;
 
 public class MainActivity extends AppCompatActivity {
 
