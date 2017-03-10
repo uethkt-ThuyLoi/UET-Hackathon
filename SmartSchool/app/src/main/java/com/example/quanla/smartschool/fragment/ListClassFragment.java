@@ -79,19 +79,16 @@ public class ListClassFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         EventBus.getDefault().register(this);
-        // luc back no deo goi cai ham nay
     }
-    // m huy dang ky trong onDestroy view dcm ok d cm khi add xong phai load lai data nhi?add thanh cong thi add vao Db luon
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
-    // sao nó đéo hiện task?
 
     @Subscribe(sticky = true ,threadMode = ThreadMode.MAIN)
     public void getDataSuccus(GetDataSuccusEvent event) {
-        // luc ve lai no doi cai nay dcm
         progress.dismiss();
         classListAdapter = new ClassListAdapter(this.getContext());
         rvClassList.setAdapter(classListAdapter);

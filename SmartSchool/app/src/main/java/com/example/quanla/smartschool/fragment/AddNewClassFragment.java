@@ -89,12 +89,12 @@ public class AddNewClassFragment extends Fragment{
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 Log.d("Add New Class", "Succrsssss");
-                EventBus.getDefault().postSticky(new AddNewClassEvent("được rồi xúc sinh"));
+                EventBus.getDefault().postSticky(new AddNewClassEvent("Add new class success"));
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                EventBus.getDefault().postSticky(new AddNewClassEvent("Đéo dc ok"));
+                EventBus.getDefault().postSticky(new AddNewClassEvent("Add new class fail"));
             }
         });
     }
